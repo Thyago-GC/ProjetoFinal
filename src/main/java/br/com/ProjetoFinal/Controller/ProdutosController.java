@@ -1,7 +1,6 @@
 package br.com.ProjetoFinal.Controller;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -40,6 +39,11 @@ public class ProdutosController {
 	@Autowired
 	private ProdutoService service;
 
+	
+	@ApiResponses(value = { 
+	@ApiResponse(code = 200, message = "OK"),
+	@ApiResponse(code = 404, message = "Not Found!"),
+	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Buscando lista de Produtos")
 	@GetMapping
 	public ResponseEntity<Page<Produtos>> listarProdutos(
@@ -47,6 +51,11 @@ public class ProdutosController {
 		return ResponseEntity.ok(service.listarTodos(pageable));
 	}
 
+	
+	@ApiResponses(value = { 
+	@ApiResponse(code = 201, message = "Criado"),
+	@ApiResponse(code = 404, message = "Not Found!"),
+	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Cadastro de Produtos")
 	@PostMapping
 	public ResponseEntity<Produtos> cadastrarProduto(@RequestBody @Valid ProdutosDto dto,
@@ -56,34 +65,52 @@ public class ProdutosController {
 		return ResponseEntity.created(uri).body(produto);
 	}
 
+	
+	@ApiResponses(value = { 
+	@ApiResponse(code = 200, message = "OK"),
+	@ApiResponse(code = 404, message = "Not Found!"),
+	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Consulta de Produtos")
 	@GetMapping("/busca")
-	public List<Produtos> buscarProdutos(@RequestParam(required = false) Double max_preco,
-			@RequestParam(required = false) Double min_preco, @RequestParam(required = false) String q) {
+	public Page<Produtos> buscarProdutos(@RequestParam(required = false) Double max_preco,
+			@RequestParam(required = false) Double min_preco, @RequestParam(required = false) String q,
+			@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+		
 		if (max_preco == null && min_preco == null && q == null) {
-			List<Produtos> prod = service.findAll();
-			return prod;
-		} else {
-			List<Produtos> produtos = service.buscaProdutos(max_preco, min_preco, q);
-			return produtos;
-		}
+			return service.listarTodos(pageable);
+		} 
+		Page<Produtos> produtos = service.buscaProdutos(max_preco, min_preco, q,pageable);
+		return produtos;
 	}
 
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
-	@ApiResponse(code = 404, message = "Not Found!") })
+	
+	@ApiResponses(value = { 
+	@ApiResponse(code = 200, message = "OK"),
+	@ApiResponse(code = 404, message = "Not Found!"),
+	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Buscando Produto Por ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Produtos>> BuscarPorId(@PathVariable Long id) {
 		return ResponseEntity.ok(service.buscaId(id));
 	}
-
+	
+	
+	@ApiResponses(value = { 
+	@ApiResponse(code = 200, message = "OK"),
+	@ApiResponse(code = 404, message = "Not Found!"),
+	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Atualizando Produto")
 	@PutMapping("/{id}")
 	public ResponseEntity<Optional<Produtos>> atualizarProduto(@PathVariable Long id,
 			@RequestBody @Valid ProdutosDto dto) {
 		return ResponseEntity.ok().body(service.atualizarCadastro(id, dto));
 	}
-
+	
+	
+	@ApiResponses(value = { 
+	@ApiResponse(code = 200, message = "OK"),
+	@ApiResponse(code = 404, message = "Not Found!"),
+	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Remover Produto")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> removerProduto(@PathVariable Long id) {

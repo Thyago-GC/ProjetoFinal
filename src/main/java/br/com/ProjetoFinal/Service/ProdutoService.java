@@ -1,6 +1,5 @@
 package br.com.ProjetoFinal.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -24,7 +23,7 @@ public class ProdutoService {
 	
 	public Optional<Produtos> buscaId(Long id) {
 		Optional<Produtos> produto = Optional.of(produtosRepository.findById(id).orElseThrow(
-				() -> new NotFoundException("Nao encontrado, ID:" + id)));
+				() -> new NotFoundException("Nao encontrado, ID: " + id)));
 		return produto;
 	}
 	
@@ -40,8 +39,8 @@ public class ProdutoService {
     
     @Transactional
     public void deletarProduto(Long id) {
-    	Optional<Produtos> produto = Optional.of(produtosRepository.findById(id).orElseThrow(
-				() -> new NotFoundException("Nao encontrado, ID:" + id)));  
+    	Optional.of(produtosRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Nao encontrado, ID: " + id)));  
     	produtosRepository.deleteById(id);
     }
 	
@@ -55,11 +54,7 @@ public class ProdutoService {
     	return produto;
     }
      
-    public List<Produtos> buscaProdutos(Double max_preco, Double min_preco,String q){
-    	return produtosRepository.BuscarProdutos(max_preco, min_preco, q);
-    }
-    
-    public List<Produtos> findAll(){
-    	return produtosRepository.findAll();
-    }
+	public Page<Produtos> buscaProdutos(Double max_preco, Double min_preco, String q, Pageable pageable) {
+		return produtosRepository.BuscarProdutos(max_preco, min_preco, q, pageable);
+	}
 }
