@@ -3,7 +3,7 @@
 
 ## Projeto
 
- - API restful para cadastro de produtos
+ - API  para cadastro de produtos
 
 ##  Configurações do projeto
   - Java 11
