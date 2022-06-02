@@ -27,3 +27,7 @@
     - Swagger
   - Tratamento de Exceções
     - ExceptionHandler
+  - Testes
+    - ProdutosControllerTest
+    - ProdutosRepositoryTest
+    - ProdutoServiceTest
