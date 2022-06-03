@@ -26,6 +26,8 @@ import br.com.ProjetoFinal.Controller.Dto.ProdutosDto;
 import br.com.ProjetoFinal.Models.Produtos;
 import br.com.ProjetoFinal.Service.ProdutoService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -45,6 +47,14 @@ public class ProdutosController {
 	@ApiResponse(code = 404, message = "Not Found!"),
 	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Buscando lista de Produtos")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+				value = "Pagina a ser carregada", defaultValue = "0"),
+		@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+				value = "Quantidade de registros", defaultValue = "10"),
+		@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+				value = "Ordenacao dos registros")
+	})
 	@GetMapping
 	public ResponseEntity<Page<Produtos>> listarProdutos(
 			@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
@@ -71,6 +81,14 @@ public class ProdutosController {
 	@ApiResponse(code = 404, message = "Not Found!"),
 	@ApiResponse(code = 500, message = "Erro Interno do Servidor")})
 	@ApiOperation(value = "Consulta de Produtos")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+				value = "Pagina a ser carregada", defaultValue = "0"),
+		@ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+				value = "Quantidade de registros", defaultValue = "10"),
+		@ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+				value = "Ordenacao dos registros")
+	})
 	@GetMapping("/busca")
 	public Page<Produtos> buscarProdutos(@RequestParam(required = false) Double max_preco,
 			@RequestParam(required = false) Double min_preco, @RequestParam(required = false) String q,
